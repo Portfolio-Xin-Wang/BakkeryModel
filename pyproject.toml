@@ -1,0 +1,18 @@
+[project]
+name = "bread-checkout-software"
+version = "0.1.0"
+description = ""
+authors = [
+    {name = "Xin Wang",email = "Xin20Wang@outlook.com"}
+]
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "polars (>=1.35.2,<2.0.0)",
+    "pandas (>=2.3.3,<3.0.0)"
+]
+
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"
