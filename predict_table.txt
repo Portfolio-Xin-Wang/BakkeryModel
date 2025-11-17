@@ -1,0 +1,5 @@
+Category:
+Other = 0
+Koffiebroodje, koffie_brood = 1
+Frikandelbroodje, frikandel_brood = 2
+
