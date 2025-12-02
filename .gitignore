@@ -1,4 +1,7 @@
 venv
 TrainingData
 .history
+*.ipynb
 __pycache__/
+images
+data
