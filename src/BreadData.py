@@ -5,7 +5,7 @@ import os
 import numpy as np
 import io 
 from pandas import DataFrame
-from skimage import io, transform
+from PIL import Image
 
 class BreadData(Dataset):
     labels: DataFrame
@@ -24,11 +24,11 @@ class BreadData(Dataset):
             idx = idx.tolist()
         # Replace with actual image_name column.
         img_name = os.path.join(self.original_directory, self.labels.iloc[idx, 1])
-        print(img_name)
-        image = io.imread(img_name)
-        landmarks = self.labels.loc[idx, 2:]
-        landmarks = np.array([landmarks], dtype=float).reshape(-1, 2)
-        sample = {'image': image, 'landmarks': landmarks}
+        # Should be fixed with working image reader like PIL or OpenCV
+        image = Image.open(img_name)
+        labels = self.labels.iloc[idx, 0]
+        labels = np.array([labels], dtype=float).reshape(-1, 1)
+        sample = {'image': image, 'labels': labels}
 
         if self.transform:
             sample = self.transform(sample)
