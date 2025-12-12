@@ -1,28 +1,35 @@
-from torch.utils.data import Dataset
+from meiosis import ImageFrame, PILEntity
 from torch import Tensor
-import torch
-import os
-import numpy as np
-import io 
-from pandas import DataFrame
-from PIL import Image
+from torch.utils.data import Dataset
+
+from .map_bread import data
+
 
 class BreadData(Dataset):
-    labels: list 
-    img: list 
+    """
+    This is a PyTorch DataSet class.
+    """
+    labels: list[str]
+    meta_data: list[str]
+    images: list[PILEntity]
 
-    def __init__(self):
+    def __init__(self, image_frame: ImageFrame, meta_data: list[str]):
+        self.images = image_frame.images_collection
+        self.labels = [e.meta_data.name for e in self.images]
+        self.meta_data = meta_data
         super().__init__()
 
-    def __getitem__(self, index) -> Tuple(Tensor, int):
+    def __getitem__(self, index:int) -> Tuple(Tensor, int):
         # Get first image entity.
-
+        image = self.images[index]
+        img = image.image_to_numpy()
+        label = self.meta_data[index]
         # Map label of image to prediction_idx: Frikandelbroodje -> 1 bijvoorbeeld.
-
+        class_idx = 1
         # Perform transformation if applicable
 
         # Return tuple.
-        return (0,0)
+        return (img, class_idx)
     
     def __len__(self):
-        return len(self.img)
+        return len(self.images)
