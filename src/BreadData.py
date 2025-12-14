@@ -9,27 +9,25 @@ class BreadData(Dataset):
     """
     This is a PyTorch DataSet class.
     """
-    labels: list[str]
-    meta_data: list[str]
     images: list[PILEntity]
 
-    def __init__(self, image_frame: ImageFrame, meta_data: list[str]):
+    def __init__(self, image_frame: ImageFrame, transform=None):
         self.images = image_frame.images_collection
-        self.labels = [e.meta_data.name for e in self.images]
-        self.meta_data = meta_data
+        self.transform = transform
         super().__init__()
 
     def __getitem__(self, index:int) -> Tuple(Tensor, int):
         # Get first image entity.
         image = self.images[index]
-        img = image.image_to_numpy()
-        label = self.meta_data[index]
-        # Map label of image to prediction_idx: Frikandelbroodje -> 1 bijvoorbeeld.
-        class_idx = 1
+        # Replaced with something more maintainable
+        label_entity = image.meta_data._applied_transformation.get("label_name", "other_code")
+        # Map label of image to prediction_idx: Frikandelbroodje -> 1 for example.
+        label_idx = data.get(label_entity)
+        class_idx = label_idx.get("label_id")
         # Perform transformation if applicable
-
-        # Return tuple.
-        return (img, class_idx)
+        if self.transform is not None:
+            return self.transform(image.image), class_idx
+        return image.image, class_idx
     
     def __len__(self):
         return len(self.images)
