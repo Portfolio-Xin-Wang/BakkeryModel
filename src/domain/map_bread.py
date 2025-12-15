@@ -1,4 +1,4 @@
-data = {
+DATA_LABEL = {
     "other_code": {
         "name": "other", # Static
         "code": "other_code", # Static
@@ -16,4 +16,4 @@ data = {
     }
 }
 
-natural_labels = [("frikandel_brood", "koff_brd"), ("koffie_brood", "koff_brd")]
+natural_labels = [("frikandel_brood", "fri_brd"), ("koffie_brood", "koff_brd")]

@@ -2,7 +2,7 @@ from meiosis import ImageFrame, PILEntity
 from torch import Tensor
 from torch.utils.data import Dataset
 
-from .map_bread import data
+from ..domain.map_bread import DATA_LABEL
 
 
 class BreadData(Dataset):
@@ -22,8 +22,8 @@ class BreadData(Dataset):
         # Replaced with something more maintainable
         label_entity = image.meta_data._applied_transformation.get("label_name", "other_code")
         # Map label of image to prediction_idx: Frikandelbroodje -> 1 for example.
-        label_idx = data.get(label_entity)
-        class_idx = label_idx.get("label_id")
+        LABEL_ENTITY = DATA_LABEL.get(label_entity)
+        class_idx = LABEL_ENTITY.get("label_id")
         # Perform transformation if applicable
         if self.transform is not None:
             return self.transform(image.image), class_idx

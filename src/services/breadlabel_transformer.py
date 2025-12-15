@@ -1,9 +1,9 @@
 from meiosis import MapTransformer
-from .const import LABEL
-from .map_bread import data, natural_labels
+from ..const import LABEL
+from ..domain.map_bread import DATA_LABEL, natural_labels
 
 class BreadLabeler(MapTransformer):
-
+    """Temperary solution"""
     def transform(self, image_store):
         image_store = super().transform(image_store)
         for entity in image_store.get_all():
