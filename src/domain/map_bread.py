@@ -13,7 +13,12 @@ DATA_LABEL = {
         "name": "koffie_broodje",  # Static
         "code": "koff_brd", # Static
         "label_id": 2, # Dynamic
-    }
+    },
+    "crois_lux": {
+        "name": "Croissant luxe",  # Static
+        "code": "crois_lux", # Static
+        "label_id": 3, # Dynamic
+    },
 }
 
-natural_labels = [("frikandel_brood", "fri_brd"), ("koffie_brood", "koff_brd")]
+natural_labels = [("frikandel_brood", "fri_brd"), ("koffie_brood", "koff_brd"), ("croissant_luxe","crois_lux")]
