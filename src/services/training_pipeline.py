@@ -29,7 +29,7 @@ class TrainingPipeline():
     def execute(self, last_data: int = None):
         train, test = self._extract()
         self._train_model(train, test)
-        self._evaluate()
+        # Returned trained model
         return self.bread_model
 
     def _extract(self) -> tuple[DataLoader, DataLoader]:
@@ -53,19 +53,21 @@ class TrainingPipeline():
                 self.optimizer.step()
                 if batch % 400 == 0:
                     print(f"Looked at {batch * len(X)}/{len(self.train_data.dataset)} samples")
-            results.append(self._validate(train, test, train_loss))
+            loss_results = self._validate_model(train, test, train_loss)
+            results.append(loss_results)
         return results
 
-    def _validate(self, train_data, test_data: DataLoader, train_loss: float):
+    def _validate_model(self, train_data, test_data: DataLoader, train_loss: float):
         # Divide total train loss by length of train dataloader (average loss per batch per epoch)
         train_loss /= len(train_data)
         test_loss, test_acc = 0, 0 
         self.bread_model.eval()
-        test_loss, test_acc = self._inference(test_data)
+        test_loss, test_acc = self._test_loss_results(test_data)
         print(f"\nTrain loss: {train_loss:.5f} | Test loss: {test_loss:.5f}, Test acc: {test_acc:.2f}%\n")
         return test_loss, test_acc
     
-    def _inference(self, test_data: DataLoader):
+    # Might need to be moved to a separate class for inference
+    def _test_loss_results(self, test_data: DataLoader):
         with torch.inference_mode():
             for X, y in test_data:
                 test_pred = self.bread_model(X)
@@ -74,8 +76,5 @@ class TrainingPipeline():
             test_loss /= len(test_data)
             test_acc /= len(test_data)
         return test_loss, test_acc
-    
-    def _evaluate(self):
-        pass
 
     
