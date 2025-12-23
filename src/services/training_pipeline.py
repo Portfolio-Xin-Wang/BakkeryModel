@@ -52,7 +52,7 @@ class TrainingPipeline():
                 loss.backward()
                 self.optimizer.step()
                 if batch % 400 == 0:
-                    print(f"Looked at {batch * len(X)}/{len(self.train_data.dataset)} samples")
+                    print(f"Looked at {batch * len(X)}/{len(train.dataset)} samples")
             loss_results = self._validate_model(train, test, train_loss)
             results.append(loss_results)
         return results
@@ -60,7 +60,6 @@ class TrainingPipeline():
     def _validate_model(self, train_data, test_data: DataLoader, train_loss: float):
         # Divide total train loss by length of train dataloader (average loss per batch per epoch)
         train_loss /= len(train_data)
-        test_loss, test_acc = 0, 0 
         self.bread_model.eval()
         test_loss, test_acc = self._test_loss_results(test_data)
         print(f"\nTrain loss: {train_loss:.5f} | Test loss: {test_loss:.5f}, Test acc: {test_acc:.2f}%\n")
@@ -68,6 +67,7 @@ class TrainingPipeline():
     
     # Might need to be moved to a separate class for inference
     def _test_loss_results(self, test_data: DataLoader):
+        test_loss, test_acc = 0, 0 
         with torch.inference_mode():
             for X, y in test_data:
                 test_pred = self.bread_model(X)
