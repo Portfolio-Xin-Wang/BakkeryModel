@@ -43,6 +43,7 @@ class TrainingPipeline():
         # Create training and testing loop
         for epoch in tqdm(range(self.EPOCHS)):
             train_loss = 0
+            print(f"Epoch: {epoch}\n-------")
             for batch, (X, y) in enumerate(train):
                 self.bread_model.train() 
                 y_pred = self.bread_model(X)
@@ -51,8 +52,6 @@ class TrainingPipeline():
                 self.optimizer.zero_grad()
                 loss.backward()
                 self.optimizer.step()
-                if batch % 400 == 0:
-                    print(f"Looked at {batch * len(X)}/{len(train.dataset)} samples")
             loss_results = self._validate_model(train, test, train_loss)
             results.append(loss_results)
         return results
