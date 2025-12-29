@@ -1,6 +1,5 @@
 from torch import nn, optim
 from torchvision import transforms
-from torchvision.transforms.functional import adjust_hue
 from torchvision.datasets import ImageFolder
 
 from src.model import BreadClassifier
@@ -24,8 +23,8 @@ def train_model():
     LENGHT = 100
     WIDTH = 100
     train_transforms, test_transform = _transform(LENGHT, WIDTH)
-    train_set = ImageFolder("data/custom", transform=train_transforms)
-    test_set = ImageFolder("data/test", transform=test_transform)
+    train_set = ImageFolder("data/training_data", transform=train_transforms)
+    test_set = ImageFolder("data/test_data", transform=test_transform)
       # Placeholder for loss function
     classifier = BreadClassifier(input_shape=3, hidden_units=10, output_shape=len(train_set.classes))  # Placeholder for model
     optimizer = optim.SGD(params=classifier.parameters(), lr=0.001, momentum=0, weight_decay=0.001)  # Placeholder for optimizer

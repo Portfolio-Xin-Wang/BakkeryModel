@@ -21,4 +21,4 @@ DATA_LABEL = {
     },
 }
 
-natural_labels = [("frikandel_brood", "fri_brd"), ("koffie_brood", "koff_brd"), ("croissant_luxe","crois_lux")]
+natural_labels = [("frikande", "fri_brd"), ("koffie", "koff_brd"), ("croissant_luxe","crois_lux")]

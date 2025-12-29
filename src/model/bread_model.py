@@ -34,7 +34,7 @@ class BreadClassifier(nn.Module):
             nn.Flatten(),
             # Where did this in_features shape come from? 
             # It's because each layer of our network compresses and changes the shape of our input data.
-            nn.Linear(in_features=hidden_units*25*25, # Gebasseerd op 200x200 input images
+            nn.Linear(in_features=hidden_units*50*50, # Gebasseerd op 200x200 input images
                       out_features=output_shape)
         )
     
