@@ -18,6 +18,7 @@ dependencies = [
     "mlflow (>=3.8.1,<4.0.0)",
     "fastapi[standard] (>=0.128.0,<0.129.0)",
     "tqdm (>=4.67.1,<5.0.0)",
+    "python-multipart (>=0.0.21,<0.0.22)",
 ]
 
 
