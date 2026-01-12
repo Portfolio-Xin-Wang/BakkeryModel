@@ -24,7 +24,6 @@ def _transform():
     return train_transforms, test_transform
 
 def train_model():
-    
     train_transforms, test_transform = _transform()
     train_set = ImageFolder("data/training_data", transform=train_transforms)
     test_set = ImageFolder("data/test_data", transform=test_transform)
