@@ -7,3 +7,5 @@ images
 data
 output
 legacy_venv
+mlruns
+*.db

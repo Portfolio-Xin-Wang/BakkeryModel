@@ -2,14 +2,14 @@
 import torch
 from torch.nn import Module
 from torch.optim import Optimizer
-from meiosis import LocalFileStorage
 from torch.utils.data import DataLoader, Dataset
-from torchvision.datasets import ImageFolder
 from tqdm.auto import tqdm
 
 from helper_functions import accuracy_fn
 
+from ..domain import ModelResult
 from ..model import BreadClassifier
+from .meta_data_service import MetaDataService
 
 
 class TrainingPipeline():
@@ -25,12 +25,18 @@ class TrainingPipeline():
         self.optimizer = optimizer
         self.train_data = train_data
         self.test_data = test_data
+        self.meta_data = MetaDataService()
     
-    def execute(self) -> BreadClassifier:
+    def execute(self) -> ModelResult:
+        self._log_pre_training()
         train, test = self._extract()
         self._train_model(train, test)
         # Returned trained model
-        return self.bread_model
+        return ModelResult(log_entity=self.meta_data.get(), model=self.bread_model)
+    
+    def _log_pre_training(self):
+        optimizer: dict = {}
+        self.meta_data.add_pre_training_param(optimizer)
 
     def _extract(self) -> tuple[DataLoader, DataLoader]:
         # Future expansion: Use the recent data to train retrain the model.
@@ -39,7 +45,6 @@ class TrainingPipeline():
         return train_data, test_data
 
     def _train_model(self, train: DataLoader, test: DataLoader):
-        results = []
         # Create training and testing loop
         for epoch in tqdm(range(self.EPOCHS)):
             train_loss = 0
@@ -52,16 +57,18 @@ class TrainingPipeline():
                 self.optimizer.zero_grad()
                 loss.backward()
                 self.optimizer.step()
-            loss_results = self._validate_model(train, test, train_loss)
-            results.append(loss_results)
-        return results
+            self._validate_model(train, test, train_loss)
+            self.meta_data.up_epoch()
+        return self.bread_model
 
     def _validate_model(self, train_data, test_data: DataLoader, train_loss: float):
         # Divide total train loss by length of train dataloader (average loss per batch per epoch)
         train_loss /= len(train_data)
         self.bread_model.eval()
         test_loss, test_acc = self._test_loss_results(test_data)
-        print(f"\nTrain loss: {train_loss:.5f} | Test loss: {test_loss:.5f}, Test acc: {test_acc:.2f}%\n")
+        self.meta_data.add_metric("train_loss", train_loss)
+        self.meta_data.add_metric("test_loss", test_loss)
+        self.meta_data.add_metric("test_accuracy", test_acc)
         return test_loss, test_acc
     
     # Might need to be moved to a separate class for inference
