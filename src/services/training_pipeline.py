@@ -26,7 +26,7 @@ class TrainingPipeline():
         self.train_data = train_data
         self.test_data = test_data
     
-    def execute(self, last_data: int = None):
+    def execute(self) -> BreadClassifier:
         train, test = self._extract()
         self._train_model(train, test)
         # Returned trained model
