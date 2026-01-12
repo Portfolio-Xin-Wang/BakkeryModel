@@ -3,6 +3,10 @@ from ..model import BreadClassifier
 from .log_entity import LogEntity
 
 class ModelResult:
+    """
+    Contains the model and training result metrics.
+    It aims to encapsulate the final results in one class
+    """
     training_results: LogEntity
     model: BreadClassifier
 

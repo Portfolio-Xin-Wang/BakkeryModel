@@ -2,6 +2,10 @@ from pydantic import BaseModel
 
 
 class LogEntity(BaseModel):
+    """
+    Encapsulate all the model results, per epoch. 
+    - Accuracy and Epoch
+    """
     model_training_param: dict = {}
     epoch_result: list = []
 
