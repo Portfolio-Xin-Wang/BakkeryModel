@@ -29,10 +29,10 @@ def train_model():
     test_set = ImageFolder("data/test_data", transform=test_transform)
       # Placeholder for loss function
     classifier = BreadClassifier(input_shape=3, hidden_units=15, output_shape=len(train_set.classes))  # Placeholder for model
-    optimizer = optim.SGD(params=classifier.parameters(), lr=0.0001, momentum=0, weight_decay=0.001)  # Placeholder for optimizer
+    optimizer = optim.SGD(params=classifier.parameters(), lr=0.001, momentum=0, weight_decay=0.001)  # Placeholder for optimizer
     loss_fn = nn.CrossEntropyLoss()   
-    pipeline = TrainingPipeline(epochs=5, optimizer=optimizer, loss_fn=loss_fn, bread_model=classifier, train_data=train_set, test_data=test_set)
-    pipeline.execute()
+    pipeline = TrainingPipeline(epochs=4, optimizer=optimizer, loss_fn=loss_fn, bread_model=classifier, train_data=train_set, test_data=test_set)
+    return pipeline.execute()
 
 # Example function
 def live_predict(input_data) -> dict:

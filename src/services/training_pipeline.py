@@ -7,7 +7,7 @@ from torch.utils.data import DataLoader, Dataset
 from torchvision.datasets import ImageFolder
 from tqdm.auto import tqdm
 
-# from helper_functions import accuracy_fn
+from helper_functions import accuracy_fn
 
 from ..model import BreadClassifier
 
@@ -71,9 +71,9 @@ class TrainingPipeline():
             for X, y in test_data:
                 test_pred = self.bread_model(X)
                 test_loss += self.loss_fn(test_pred, y) 
-                # test_acc += accuracy_fn(y_true=y, y_pred=test_pred.argmax(dim=1))
+                test_acc += accuracy_fn(y_true=y, y_pred=test_pred.argmax(dim=1))
             test_loss /= len(test_data)
-            # test_acc /= len(test_data)
-        return test_loss, 19.99
+            test_acc /= len(test_data)
+        return test_loss, test_acc
 
     
