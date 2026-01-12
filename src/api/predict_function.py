@@ -28,23 +28,14 @@ def train_model():
     train_set = ImageFolder("data/training_data", transform=train_transforms)
     test_set = ImageFolder("data/test_data", transform=test_transform)
       # Placeholder for loss function
-    classifier = BreadClassifier(input_shape=3, hidden_units=15, output_shape=len(train_set.classes))  # Placeholder for model
-    optimizer = optim.SGD(params=classifier.parameters(), lr=0.001, momentum=0, weight_decay=0.001)  # Placeholder for optimizer
+    classifier = BreadClassifier(input_shape=3, hidden_units=15, output_shape=len(train_set.classes))
+    optimizer = optim.SGD(params=classifier.parameters(), lr=0.001, momentum=0, weight_decay=0.001)
     loss_fn = nn.CrossEntropyLoss()   
     pipeline = TrainingPipeline(epochs=4, optimizer=optimizer, loss_fn=loss_fn, bread_model=classifier, train_data=train_set, test_data=test_set)
     return pipeline.execute()
 
 # Example function
 def live_predict(input_data) -> dict:
-    """
-    Function to make live predictions on input data.
-
-    Args:
-        input_data (dict): A dictionary containing the input features for prediction.
-
-    Returns:
-        dict: A dictionary containing the prediction results.
-    """
     PATH_MODEL = "ready_models/bakkery_model_v1.pth"
     # Placeholder for actual prediction logic
     # In a real implementation, this would involve loading a trained model
