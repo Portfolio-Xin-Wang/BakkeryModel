@@ -6,7 +6,7 @@ from PIL import Image
 from .predict_function import live_predict
 
 predict_router = APIRouter()
-# This is the prdict endpoint.
+
 @predict_router.post("/predict")
 async def predict(file: UploadFile, help: str = Form(...)):
     image = await file.read() # Placeholder
