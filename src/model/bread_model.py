@@ -1,4 +1,6 @@
-from torch import nn, Tensor
+from torch import Tensor, inference_mode, max, nn
+from torch.nn import functional
+
 
 class BreadClassifier(nn.Module):
     """
@@ -48,3 +50,11 @@ class BreadClassifier(nn.Module):
     
     def forward(self, x: Tensor):
         return self._forward(x)
+    
+    def single_predict(self, input: Tensor):
+        self.eval()
+        with inference_mode():
+            output = self(input)
+        probabilities = functional.softmax(output[0], dim=0)
+        confidence, index = max(probabilities, 0)
+        return confidence, index

@@ -1,18 +1,12 @@
-import io
-
-import torch
-from PIL import Image
-from torch import Tensor, load, nn, optim
+from torch import load, nn, optim
 from torchvision import transforms
 from torchvision.datasets import ImageFolder
 
-from src.domain import Prediction
 from src.model import BreadClassifier
-
-from ..services.training_pipeline import TrainingPipeline
+from src.services import TrainingPipeline
 
 LENGHT = 200
-WIDTH = 200
+WIDTH = 200 
 
 PATH_MODEL = "ready_models/bakkery_model_v1.pth"
 MODEL = BreadClassifier(input_shape=3, hidden_units=15, output_shape=3)
@@ -40,24 +34,3 @@ def train_model():
     loss_fn = nn.CrossEntropyLoss()   
     pipeline = TrainingPipeline(epochs=4, optimizer=optimizer, loss_fn=loss_fn, bread_model=classifier, train_data=TRAIN_SET, test_data=TEST_SET)
     return pipeline.execute()
-
-# Example function
-def bytes_to_tensor(img_bytes)-> Tensor:
-    pil_image = Image.open(io.BytesIO(img_bytes)) 
-    tensor_image = test_transform(pil_image)
-    ready_input = torch.unsqueeze(tensor_image, 0)
-    return ready_input
-
-def live_predict(input_data: bytes) -> dict:
-    input_image = bytes_to_tensor(input_data)
-    MODEL.eval()
-    with torch.inference_mode():
-        output = MODEL(input_image)
-    probabilities = torch.nn.functional.softmax(output[0], dim=0)
-    # Get the index of the highest probability
-    confidence, index = torch.max(probabilities, 0)
-    prediction_result = Prediction(
-        prediction_nr=index.item(), 
-        confidence_percentage=confidence.item() * 100,
-        prediction_label=MAP_LABELS.get(index.item(), "Unknown"))
-    return prediction_result
