@@ -9,8 +9,6 @@ LENGHT = 200
 WIDTH = 200 
 
 PATH_MODEL = "ready_models/bakkery_model_v1.pth"
-MODEL = BreadClassifier(input_shape=3, hidden_units=15, output_shape=3)
-MODEL.load_state_dict(load(PATH_MODEL, weights_only=True))
 
 test_transform = transforms.Compose([
         transforms.Resize((LENGHT, WIDTH)),

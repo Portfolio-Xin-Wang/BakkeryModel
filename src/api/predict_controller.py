@@ -9,6 +9,7 @@ from torchvision import transforms
 LENGHT = 200
 WIDTH = 200
 
+# NOTE: Will need to be refactored to decouple ImageFolder with the inference process.
 train_transforms = transforms.Compose([
         transforms.Resize((LENGHT, WIDTH)),
         transforms.RandomAutocontrast(),
