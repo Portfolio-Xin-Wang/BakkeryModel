@@ -1,13 +1,22 @@
-from torch import nn, optim, load
+import io
+
 import torch
+from PIL import Image
+from torch import load, nn, optim, Tensor
 from torchvision import transforms
 from torchvision.datasets import ImageFolder
 
 from src.model import BreadClassifier
+from src.domain import Prediction
+
 from ..services.training_pipeline import TrainingPipeline
 
 LENGHT = 200
 WIDTH = 200
+MAP_LABELS = {}
+PATH_MODEL = "ready_models/bakkery_model_v1.pth"
+MODEL = BreadClassifier(input_shape=3, hidden_units=15, output_shape=3)
+MODEL.load_state_dict(load(PATH_MODEL, weights_only=True))
 
 test_transform = transforms.Compose([
         transforms.Resize((LENGHT, WIDTH)),
@@ -23,6 +32,7 @@ train_transforms = transforms.Compose([
 def _transform():
     return train_transforms, test_transform
 
+# Mainly used 
 def train_model():
     train_transforms, test_transform = _transform()
     train_set = ImageFolder("data/training_data", transform=train_transforms)
@@ -35,28 +45,19 @@ def train_model():
     return pipeline.execute()
 
 # Example function
-def live_predict(input_data) -> dict:
-    PATH_MODEL = "ready_models/bakkery_model_v1.pth"
-    # Placeholder for actual prediction logic
-    # In a real implementation, this would involve loading a trained model
-    # and using it to make predictions on the input_data.
-    imported_model = load(PATH_MODEL, weights_only=True)
-    image = test_transform(input_data)
-    model = BreadClassifier(input_shape=3, hidden_units=15, output_shape=3)
-    model.load_state_dict(imported_model)
-    ready_input = torch.unsqueeze(image, 0)
-    model.eval()
-    with torch.inference_mode():
-        output = model(ready_input)
-        print(output)
+def bytes_to_tensor(img_bytes)-> Tensor:
+    pil_image = Image.open(io.BytesIO(img_bytes)) 
+    tensor_image = test_transform(pil_image)
+    ready_input = torch.unsqueeze(tensor_image, 0)
+    return ready_input
 
+def live_predict(input_data: bytes) -> dict:
+    input_image = bytes_to_tensor(input_data)  # Example conversion
+    MODEL.eval()
+    with torch.inference_mode():
+        output = MODEL(input_image)
     probabilities = torch.nn.functional.softmax(output[0], dim=0)
     # Get the index of the highest probability
     confidence, index = torch.max(probabilities, 0)
-    prediction_result = {
-        "input": index.item(),
-        "prediction": "dummy_bread_type", # Some mapping of prediction to business data
-        "confidence": confidence.item()
-    }
-    
+    prediction_result = Prediction(prediction_nr=index.item(), confidence_percentage=confidence.item())
     return prediction_result

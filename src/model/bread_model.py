@@ -1,10 +1,11 @@
 from torch import nn, Tensor
 
 class BreadClassifier(nn.Module):
-
+    """
+    A classification model based on a CNN-Architecture
+    """
     def __init__(self, input_shape: int, hidden_units: int, output_shape: int):
         super().__init__()
-
         self.adaptive = nn.AdaptiveAvgPool2d(output_size=(300, 300))
         # Convolutional Layer
         self.block_1 = nn.Sequential(
@@ -34,18 +35,14 @@ class BreadClassifier(nn.Module):
         # Output layer
         self.output = nn.Sequential(
             nn.Flatten(),
-            # Where did this in_features shape come from? 
-            # It's because each layer of our network compresses and changes the shape of our input data.
-            nn.Linear(in_features=84375, # Gebasseerd op 200x200 input images
+            nn.Linear(in_features=84375, # Gebasseerd op 300*300 en de twee activatie functies
                       out_features=output_shape)
         )
 
     def _forward(self, x: Tensor):
         x = self.adaptive(x)
         x = self.block_1(x)
-        # print(f"Shape after block 1: {x.shape}")
         x = self.block_2(x)
-        # print(f"Shape after block 2: {x.shape}")
         x = self.output(x)
         return x
     
