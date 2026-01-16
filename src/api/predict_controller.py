@@ -17,10 +17,17 @@ train_transforms = transforms.Compose([
     ])
 
 TRAIN_SET = ImageFolder("data/training_data", transform=train_transforms)
+
+# GLOBAL
 PATH_MODEL = "ready_models/bakkery_model_v1.pth"
+# GLOBAL
 MODEL = BreadClassifier(input_shape=3, hidden_units=15, output_shape=3)
+# GLOBAL
 MODEL.load_state_dict(load(PATH_MODEL, weights_only=True))
+# GLOBAL
 MAP_LABELS = {v: k for k, v in TRAIN_SET.class_to_idx.items()}
+
+# LOCAL
 inference_pipeline = InferencePipeline(MODEL, MAP_LABELS)
 
 predict_router = APIRouter()
