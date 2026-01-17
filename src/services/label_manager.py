@@ -33,6 +33,10 @@ class LabelManager(ILabelManager):
         # Verbeteringen vereist.
         if (dataloader is not None):
             self._pre_load()
+
+    @classmethod
+    def create_from_dataset(cls, location:str, data: DatasetFolder):
+        return LabelManager(location, data)
     
     def _pre_load(self):
         mappings = { id: label for (label, id) in self.dataloader.class_to_idx.items() }
@@ -57,7 +61,7 @@ class LabelManager(ILabelManager):
         if self.map_cache == {}:
             with open(f"{self.location}/model_label.json", "r") as f:
                  self.map_cache = json.load(f)
-        return self.map_cache.get(label_id)
+        return self.map_cache.get(str(label_id))
     
     def update(self, map: dict[str, int]):
         mappings = { id: label for (label, id) in map.items() }

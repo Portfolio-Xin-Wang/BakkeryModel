@@ -10,10 +10,9 @@ from src.model import BreadClassifier
 from .label_manager import LabelManager
 
 class InferencePipeline:
-    def __init__(self, model: BreadClassifier, map_labels: dict, mapper: LabelManager):
+    def __init__(self, model: BreadClassifier, mapper: LabelManager):
         self.model = model
         self.test_transform = transforms.ToTensor()
-        self.map_labels = map_labels
         self.mapper = mapper
 
     def _bytes_to_tensor(self, img_bytes: bytes) -> Tensor:

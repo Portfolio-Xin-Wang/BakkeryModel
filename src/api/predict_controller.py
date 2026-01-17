@@ -2,33 +2,15 @@ from fastapi import APIRouter, UploadFile
 
 from src.model import BreadClassifier
 from torch import load
-from src.services import InferencePipeline
-from torchvision.datasets import ImageFolder
-from torchvision import transforms
+from src.services import InferencePipeline, LabelManager
+from src.const import PATH_MODEL, FOLDER_MODEL
 
-LENGHT = 200
-WIDTH = 200
-
-# NOTE: Will need to be refactored to decouple ImageFolder with the inference process.
-train_transforms = transforms.Compose([
-        transforms.Resize((LENGHT, WIDTH)),
-        transforms.RandomAutocontrast(),
-        transforms.ToTensor()
-    ])
-
-TRAIN_SET = ImageFolder("data/training_data", transform=train_transforms)
-
-# GLOBAL
-PATH_MODEL = "ready_models/bakkery_model_v1.pth"
+manager = LabelManager(location=FOLDER_MODEL)
 # GLOBAL
 MODEL = BreadClassifier(input_shape=3, hidden_units=15, output_shape=3)
-# GLOBAL
 MODEL.load_state_dict(load(PATH_MODEL, weights_only=True))
-# GLOBAL
-MAP_LABELS = {v: k for k, v in TRAIN_SET.class_to_idx.items()}
-
 # LOCAL
-inference_pipeline = InferencePipeline(MODEL, MAP_LABELS)
+inference_pipeline = InferencePipeline(MODEL, manager)
 
 predict_router = APIRouter()
 
