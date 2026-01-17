@@ -7,12 +7,14 @@ from torchvision import transforms
 
 from src.domain import Prediction
 from src.model import BreadClassifier
+from .label_manager import LabelManager
 
 class InferencePipeline:
-    def __init__(self, model: BreadClassifier, map_labels: dict):
+    def __init__(self, model: BreadClassifier, map_labels: dict, mapper: LabelManager):
         self.model = model
         self.test_transform = transforms.ToTensor()
         self.map_labels = map_labels
+        self.mapper = mapper
 
     def _bytes_to_tensor(self, img_bytes: bytes) -> Tensor:
         pil_image = Image.open(io.BytesIO(img_bytes))
@@ -26,6 +28,6 @@ class InferencePipeline:
         prediction_result = Prediction(
             prediction_nr=index.item(),
             confidence_percentage=confidence.item() * 100,
-            prediction_label=self.map_labels.get(index.item(), "Unknown")
+            prediction_label=self.mapper.get_label(index.item())
         )
         return prediction_result
