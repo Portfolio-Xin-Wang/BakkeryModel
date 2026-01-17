@@ -3,6 +3,7 @@ import torch
 from torch.nn import Module
 from torch.optim import Optimizer
 from torch.utils.data import DataLoader, Dataset
+from torchvision.datasets import DatasetFolder
 from tqdm.auto import tqdm
 
 from helper_functions import accuracy_fn
@@ -10,6 +11,7 @@ from helper_functions import accuracy_fn
 from ..domain import ModelResult
 from ..model import BreadClassifier
 from .meta_data_service import MetaDataService
+from .label_manager import LabelManager
 
 
 class TrainingPipeline():
@@ -18,19 +20,28 @@ class TrainingPipeline():
     loss_fn: Module
     optimizer: Optimizer
 
-    def __init__(self, epochs: int, bread_model: BreadClassifier, loss_fn, optimizer, train_data: Dataset=None, test_data: Dataset=None):
+    def __init__(self, 
+                 epochs: int, 
+                 bread_model: BreadClassifier, 
+                 label_manager: LabelManager,
+                 loss_fn, 
+                 optimizer, 
+                 train_data: DatasetFolder=None, 
+                 test_data: DatasetFolder=None):
         self.EPOCHS = epochs
         self.bread_model = bread_model
         self.loss_fn = loss_fn
         self.optimizer = optimizer
         self.train_data = train_data
         self.test_data = test_data
+        self.label_manager = label_manager
         self.meta_data = MetaDataService()
     
     def execute(self) -> ModelResult:
         self._log_pre_training()
         train, test = self._extract()
         self._train_model(train, test)
+        self.label_manager._update_file(self.train_data.class_to_idx)
         # Returned trained model
         return ModelResult(log_entity=self.meta_data.get(), model=self.bread_model)
     
