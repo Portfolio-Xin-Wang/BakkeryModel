@@ -5,12 +5,12 @@ from torch import load
 from src.services import InferencePipeline, LabelManager
 from src.const import PATH_MODEL, FOLDER_MODEL
 
-manager = LabelManager(location=FOLDER_MODEL)
+label_manager = LabelManager(location=FOLDER_MODEL)
 # GLOBAL
 MODEL = BreadClassifier(input_shape=3, hidden_units=15, output_shape=3)
 MODEL.load_state_dict(load(PATH_MODEL, weights_only=True))
 # LOCAL
-inference_pipeline = InferencePipeline(MODEL, manager)
+inference_pipeline = InferencePipeline(MODEL, label_manager)
 
 predict_router = APIRouter()
 

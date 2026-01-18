@@ -52,6 +52,12 @@ class BreadClassifier(nn.Module):
         return self._forward(x)
     
     def single_predict(self, input: Tensor):
+        """
+        A custom predict function is utilized instead of PyTorch forward method, 
+        because it encapsulate all of the logic needed to utilize a PyTorch model.
+
+        This will generate a singular prediction and the confidence in percentage between 0 and 1.
+        """
         self.eval()
         with inference_mode():
             output = self(input)

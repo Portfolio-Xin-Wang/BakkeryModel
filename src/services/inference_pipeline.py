@@ -10,6 +10,9 @@ from src.model import BreadClassifier
 from .label_manager import LabelManager
 
 class InferencePipeline:
+    """
+    This service is responsible for classifying the type of bread.
+    """
     def __init__(self, model: BreadClassifier, mapper: LabelManager):
         self.model = model
         self.test_transform = transforms.ToTensor()

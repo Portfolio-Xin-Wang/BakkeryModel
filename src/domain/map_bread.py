@@ -20,5 +20,3 @@ DATA_LABEL = {
         "label_id": 3, # Dynamic
     },
 }
-
-natural_labels = [("frikande", "fri_brd"), ("koffie", "koff_brd"), ("croissant_luxe","crois_lux")]

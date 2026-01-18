@@ -1,5 +1,11 @@
 # (Work in progress) Documentation Bread checkut software
 
+## Content documentation:
+- Software architecture
+- AI-Architecture
+- Labels
+- Metrics
+
 ## Step 1
 Installeer pipx globaal op jouw machine.
 ```sh

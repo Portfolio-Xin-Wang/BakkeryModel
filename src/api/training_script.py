@@ -4,7 +4,7 @@ from torchvision.datasets import ImageFolder
 
 from src.model import BreadClassifier
 from src.services import TrainingPipeline, LabelManager
-from src.const import IMG_LENGHT, IMG_WIDTH
+from src.const import IMG_LENGHT, IMG_WIDTH, TRAIN_DATA_BREAD_CLASSIFIER, TEST_DATA_BREAD_CLASSIFIER
 
 test_transform = transforms.Compose([
         transforms.Resize((IMG_LENGHT, IMG_WIDTH)),
@@ -17,8 +17,8 @@ train_transforms = transforms.Compose([
         transforms.ToTensor()
     ])
 
-TRAIN_SET = ImageFolder("data/training_data", transform=train_transforms)
-TEST_SET = ImageFolder("data/test_data", transform=test_transform)
+TRAIN_SET = ImageFolder(TRAIN_DATA_BREAD_CLASSIFIER, transform=train_transforms)
+TEST_SET = ImageFolder(TEST_DATA_BREAD_CLASSIFIER, transform=test_transform)
 manager = LabelManager(dataloader=TRAIN_SET)
 
 # Mainly used 
