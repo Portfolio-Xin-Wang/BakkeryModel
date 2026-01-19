@@ -1,0 +1,7 @@
+pillow
+torch
+torchvision
+meiosis
+mlflow
+fastapi[standard]
+tqdm

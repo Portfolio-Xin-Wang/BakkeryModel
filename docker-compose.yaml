@@ -3,8 +3,5 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    port: 
-    - '8000:8000'
-    volume:
-    - './app'
-    
+    ports: 
+    - '8000:12000'
