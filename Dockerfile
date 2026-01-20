@@ -1,18 +1,19 @@
-FROM python:3.14
+FROM python:3.12-slim
 
-WORKDIR /
-RUN dir 
-# Install pipx
-RUN pip install poetry
+WORKDIR /app
 
-COPY pyproject.toml poetry.lock README.md /
+# Copy project files
+COPY pyproject.toml poetry.lock ./
 
-RUN poetry install --no-root
+# Install poetry and dependencies
+RUN pip install --no-cache-dir poetry && \
+    poetry config virtualenvs.create false && \
+    poetry install --no-root --no-directory
 
+# Copy application code
+COPY ./ ./
 
-# Install all packages using poetry
 EXPOSE 12000
 
-# Finalize startup command: Uvicorn.
-
-CMD [ "uvicorn" , "12000"]
+# Start the application using uvicorn directly
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "12000"]
