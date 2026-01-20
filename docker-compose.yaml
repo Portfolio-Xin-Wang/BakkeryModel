@@ -1,0 +1,7 @@
+services:
+  model_api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports: 
+    - '8000:12000'
