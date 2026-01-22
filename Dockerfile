@@ -3,13 +3,12 @@ FROM python:3.12-slim
 WORKDIR /app
 
 # Copy project files
-COPY pyproject.toml poetry.lock install/requirements_torch.txt  ./
-
+COPY pyproject.toml poetry.lock ./
+COPY install ./install/
 # Install poetry and dependencies
 RUN pip install --no-cache-dir poetry && \
     poetry config virtualenvs.create false && \
-    poetry install --no-root --no-directory && \
-    pip install --no-cache-dir -r requirements_torch.txt
+    install/custom_install.sh
 
 # Copy application code
 COPY ./ ./
