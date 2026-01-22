@@ -1,0 +1,4 @@
+# Specific requirements.txt for downloading for PyTorch, because Poetry downloads all the binaries causing to increase the docker size to 16 GB
+index_url=="https://download.pytorch.org/whl/cpu"
+torch
+torchvision
