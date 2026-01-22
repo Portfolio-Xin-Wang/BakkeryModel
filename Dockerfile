@@ -4,11 +4,11 @@ WORKDIR /app
 
 # Copy project files
 COPY pyproject.toml poetry.lock ./
-
+COPY install ./install/
 # Install poetry and dependencies
 RUN pip install --no-cache-dir poetry && \
     poetry config virtualenvs.create false && \
-    poetry install --no-root --no-directory
+    install/custom_install.sh
 
 # Copy application code
 COPY ./ ./

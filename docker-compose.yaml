@@ -3,5 +3,6 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    mem_limit: '2048m'
     ports: 
     - '8000:12000'
