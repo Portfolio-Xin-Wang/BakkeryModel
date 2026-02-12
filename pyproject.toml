@@ -14,6 +14,9 @@ dependencies = [
     "fastapi[standard] (>=0.128.0,<0.129.0)",
     "tqdm (>=4.67.1,<5.0.0)",
     "uvicorn (>=0.40.0,<0.41.0)",
+    "onnxscript (>=0.6.2,<0.7.0)",
+    "onnx (>=1.20.1,<2.0.0)",
+    "onnxruntime (>=1.24.1,<2.0.0)",
 ]
 
 [build-system]
